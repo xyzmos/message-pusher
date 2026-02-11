@@ -11,7 +11,7 @@ const Footer = () => {
   });
 
   return (
-    <Segment vertical>
+    <Segment vertical basic>
       <Container textAlign='center'>
         {Footer === '' ? (
           <div className='custom-footer'>

@@ -40,7 +40,7 @@ const Home = () => {
         </>
       ) : (
         <>
-          <Segment>
+          <Segment basic>
             <Header as='h3'>系统状况</Header>
             <Grid columns={2} stackable>
               <Grid.Column>

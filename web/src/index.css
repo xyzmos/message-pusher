@@ -13,7 +13,7 @@
 
 body {
   margin: 0;
-  padding-top: 55px;
+  padding-top: 70px; /* Increased for better header separation */
   overflow-y: scroll;
   font-family: Lato, 'Helvetica Neue', Arial, Helvetica, "Microsoft YaHei", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -32,7 +32,9 @@ code {
 }
 
 .main-content {
-  padding: 4px;
+  padding: 24px; /* Increased padding */
+  max-width: 1200px; /* Limit width for better readability */
+  margin: 0 auto;
 }
 
 .small-icon .icon {
@@ -87,6 +89,13 @@ a:hover {
   border-radius: 50% !important;
 }
 
+/* New Helper to remove shadow */
+.neu-no-shadow {
+    box-shadow: none !important;
+    background: transparent !important;
+    border: none !important;
+}
+
 /* Semantic UI Overrides */
 
 /* Segments, Cards, Messages */
@@ -99,6 +108,13 @@ a:hover {
   box-shadow: 8px 8px 16px var(--neu-shadow-dark), -8px -8px 16px var(--neu-shadow-light) !important;
   border-radius: var(--neu-radius) !important;
   color: var(--neu-text) !important;
+}
+
+/* Special class for transparent segments */
+.ui.basic.segment {
+    box-shadow: none !important;
+    background: transparent !important;
+    border: none !important;
 }
 
 .ui.card > .content > .header,
@@ -126,6 +142,7 @@ a:hover {
   border-radius: 10px !important;
   transition: all 0.2s ease !important;
   font-weight: 600 !important;
+  margin-right: 8px !important; /* Add spacing between buttons */
 }
 
 .ui.button:hover {
@@ -191,16 +208,26 @@ a:hover {
   box-shadow: none !important;
 }
 
+/* Fixed Header Style */
 .ui.menu.fixed {
     box-shadow: 0px 4px 10px var(--neu-shadow-dark) !important;
+    z-index: 1000;
 }
 
 .ui.menu .item {
     color: var(--neu-text) !important;
+    margin: 0 4px !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease;
 }
 
 .ui.menu .item:before {
     background: transparent !important;
+}
+
+.ui.menu .item:hover {
+    background: transparent !important;
+    box-shadow: 3px 3px 6px var(--neu-shadow-dark), -3px -3px 6px var(--neu-shadow-light) !important;
 }
 
 .ui.menu .active.item {
@@ -208,7 +235,6 @@ a:hover {
     color: var(--neu-accent) !important;
     font-weight: bold !important;
     box-shadow: inset 3px 3px 6px var(--neu-shadow-dark), inset -3px -3px 6px var(--neu-shadow-light) !important;
-    border-radius: 8px !important;
 }
 
 /* Dropdown */
