@@ -1,8 +1,9 @@
-FROM node:16 as builder
+FROM node:18 AS builder
 
 WORKDIR /build
 COPY ./web .
 COPY ./VERSION .
+RUN corepack enable && corepack prepare yarn@1.22.22 --activate
 RUN yarn install
 RUN REACT_APP_VERSION=$(cat VERSION) yarn build
 
