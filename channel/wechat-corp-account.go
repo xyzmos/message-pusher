@@ -49,7 +49,7 @@ func (i *WeChatCorpAccountTokenStoreItem) Token() string {
 
 func (i *WeChatCorpAccountTokenStoreItem) Refresh() {
 	// https://work.weixin.qq.com/api/doc/90000/90135/91039
-	client, err := newHTTPClient(i.Proxy, 5*time.Second)
+	client, err := newHTTPClient(i.Proxy, 30*time.Second)
 	if err != nil {
 		common.SysError("failed to create http client: " + err.Error())
 		return
@@ -159,7 +159,7 @@ func SendWeChatCorpMessage(message *model.Message, user *model.User, channel_ *m
 		Proxy:       proxyAddress,
 	}
 	accessToken := TokenStoreGetToken(tokenItem.Key())
-	client, err := newHTTPClient(proxyAddress, 10*time.Second)
+	client, err := newHTTPClient(proxyAddress, 30*time.Second)
 	if err != nil {
 		return err
 	}

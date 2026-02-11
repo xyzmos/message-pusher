@@ -26,7 +26,17 @@ func newHTTPClient(proxyAddress string, timeout time.Duration) (*http.Client, er
 func newHTTPTransport(proxyAddress string) (*http.Transport, error) {
 	base, ok := http.DefaultTransport.(*http.Transport)
 	if !ok {
-		return &http.Transport{}, nil
+		return &http.Transport{
+			DialContext: (&net.Dialer{
+				Timeout:   10 * time.Second,
+				KeepAlive: 30 * time.Second,
+			}).DialContext,
+			ForceAttemptHTTP2:     true,
+			MaxIdleConns:          100,
+			IdleConnTimeout:       90 * time.Second,
+			TLSHandshakeTimeout:   10 * time.Second,
+			ExpectContinueTimeout: 1 * time.Second,
+		}, nil
 	}
 	transport := base.Clone()
 	proxyAddress = strings.TrimSpace(proxyAddress)
@@ -46,15 +56,40 @@ func newHTTPTransport(proxyAddress string) (*http.Transport, error) {
 		transport.Proxy = http.ProxyURL(u)
 		return transport, nil
 	case "socks5", "socks5h":
-		normalized := *u
-		normalized.Scheme = "socks5"
-		dialer, err := proxy.FromURL(&normalized, proxy.Direct)
+		var auth *proxy.Auth
+		if u.User != nil {
+			auth = &proxy.Auth{
+				User:     u.User.Username(),
+				Password: "",
+			}
+			if password, ok := u.User.Password(); ok {
+				auth.Password = password
+			}
+		}
+		dialer, err := proxy.SOCKS5("tcp", u.Host, auth, &net.Dialer{
+			Timeout:   10 * time.Second,
+			KeepAlive: 30 * time.Second,
+		})
 		if err != nil {
 			return nil, err
 		}
 		transport.Proxy = nil
 		transport.DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
-			return dialer.Dial(network, addr)
+			type dialResult struct {
+				conn net.Conn
+				err  error
+			}
+			ch := make(chan dialResult, 1)
+			go func() {
+				conn, err := dialer.Dial(network, addr)
+				ch <- dialResult{conn: conn, err: err}
+			}()
+			select {
+			case <-ctx.Done():
+				return nil, ctx.Err()
+			case r := <-ch:
+				return r.conn, r.err
+			}
 		}
 		return transport, nil
 	default:

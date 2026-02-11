@@ -25,7 +25,7 @@ type telegramMessageResponse struct {
 
 func SendTelegramMessage(message *model.Message, user *model.User, channel_ *model.Channel) error {
 	// https://core.telegram.org/bots/api#sendmessage
-	client, err := newHTTPClient(channel_.URL, 10*time.Second)
+	client, err := newHTTPClient(channel_.URL, 30*time.Second)
 	if err != nil {
 		return err
 	}
