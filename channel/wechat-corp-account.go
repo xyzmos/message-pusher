@@ -23,18 +23,19 @@ type WeChatCorpAccountTokenStoreItem struct {
 	CorpId      string
 	AgentSecret string
 	AgentId     string
+	Proxy       string
 	AccessToken string
 }
 
 func (i *WeChatCorpAccountTokenStoreItem) Key() string {
-	return i.CorpId + i.AgentId + i.AgentSecret
+	return i.CorpId + i.AgentId + i.AgentSecret + strings.TrimSpace(i.Proxy)
 }
 
 func (i *WeChatCorpAccountTokenStoreItem) IsShared() bool {
 	appId := fmt.Sprintf("%s|%s", i.CorpId, i.AgentId)
 	var count int64 = 0
-	model.DB.Model(&model.Channel{}).Where("secret = ? and app_id = ? and type = ?",
-		i.AgentSecret, appId, model.TypeWeChatCorpAccount).Count(&count)
+	model.DB.Model(&model.Channel{}).Where("secret = ? and app_id = ? and type = ? and url = ?",
+		i.AgentSecret, appId, model.TypeWeChatCorpAccount, strings.TrimSpace(i.Proxy)).Count(&count)
 	return count > 1
 }
 
@@ -48,8 +49,10 @@ func (i *WeChatCorpAccountTokenStoreItem) Token() string {
 
 func (i *WeChatCorpAccountTokenStoreItem) Refresh() {
 	// https://work.weixin.qq.com/api/doc/90000/90135/91039
-	client := http.Client{
-		Timeout: 5 * time.Second,
+	client, err := newHTTPClient(i.Proxy, 5*time.Second)
+	if err != nil {
+		common.SysError("failed to create http client: " + err.Error())
+		return
 	}
 	req, err := http.NewRequest("GET", fmt.Sprintf("https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s",
 		i.CorpId, i.AgentSecret), nil)
@@ -148,13 +151,24 @@ func SendWeChatCorpMessage(message *model.Message, user *model.User, channel_ *m
 	if err != nil {
 		return err
 	}
-	key := fmt.Sprintf("%s%s%s", corpId, agentId, agentSecret)
-	accessToken := TokenStoreGetToken(key)
-	resp, err := http.Post(fmt.Sprintf("https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=%s", accessToken), "application/json",
+	proxyAddress := channel_.URL
+	tokenItem := WeChatCorpAccountTokenStoreItem{
+		CorpId:      corpId,
+		AgentSecret: agentSecret,
+		AgentId:     agentId,
+		Proxy:       proxyAddress,
+	}
+	accessToken := TokenStoreGetToken(tokenItem.Key())
+	client, err := newHTTPClient(proxyAddress, 10*time.Second)
+	if err != nil {
+		return err
+	}
+	resp, err := client.Post(fmt.Sprintf("https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=%s", accessToken), "application/json",
 		bytes.NewBuffer(jsonData))
 	if err != nil {
 		return err
 	}
+	defer resp.Body.Close()
 	var res wechatCorpMessageResponse
 	err = json.NewDecoder(resp.Body).Decode(&res)
 	if err != nil {

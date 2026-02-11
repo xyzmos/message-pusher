@@ -337,6 +337,14 @@ const EditChannel = () => {
                 value={inputs.other}
                 onChange={handleInputChange}
               />
+              <Form.Input
+                label='代理地址（可选）'
+                name='url'
+                onChange={handleInputChange}
+                autoComplete='new-password'
+                value={inputs.url}
+                placeholder='http://127.0.0.1:7890 或 socks5://127.0.0.1:7890'
+              />
             </Form.Group>
           </>
         );
@@ -518,6 +526,16 @@ const EditChannel = () => {
                 autoComplete='new-password'
                 value={inputs.account_id}
                 placeholder='在此设置 Telegram 会话 ID'
+              />
+            </Form.Group>
+            <Form.Group widths={1}>
+              <Form.Input
+                label='代理地址（可选）'
+                name='url'
+                onChange={handleInputChange}
+                autoComplete='new-password'
+                value={inputs.url}
+                placeholder='http://127.0.0.1:7890 或 socks5://127.0.0.1:7890'
               />
             </Form.Group>
             <Button onClick={getTelegramChatId} loading={loading}>

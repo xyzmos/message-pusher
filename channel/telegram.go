@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"message-pusher/model"
-	"net/http"
+	"time"
 	"unicode/utf8"
 )
 
@@ -25,6 +25,10 @@ type telegramMessageResponse struct {
 
 func SendTelegramMessage(message *model.Message, user *model.User, channel_ *model.Channel) error {
 	// https://core.telegram.org/bots/api#sendmessage
+	client, err := newHTTPClient(channel_.URL, 10*time.Second)
+	if err != nil {
+		return err
+	}
 	messageRequest := telegramMessageRequest{
 		ChatId: channel_.AccountId,
 	}
@@ -53,13 +57,14 @@ func SendTelegramMessage(message *model.Message, user *model.User, channel_ *mod
 		if err != nil {
 			return err
 		}
-		resp, err := http.Post(fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", channel_.Secret), "application/json",
+		resp, err := client.Post(fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", channel_.Secret), "application/json",
 			bytes.NewBuffer(jsonData))
 		if err != nil {
 			return err
 		}
 		var res telegramMessageResponse
 		err = json.NewDecoder(resp.Body).Decode(&res)
+		_ = resp.Body.Close()
 		if err != nil {
 			return err
 		}
