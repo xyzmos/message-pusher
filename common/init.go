@@ -19,7 +19,7 @@ var (
 func printHelp() {
 	fmt.Println(fmt.Sprintf("Message Pusher %s - Your all in one message push system.", Version))
 	fmt.Println("Copyright (C) 2023 JustSong. All rights reserved.")
-	fmt.Println("GitHub: https://github.com/songquanpeng/message-pusher")
+	fmt.Println("GitHub: https://github.com/xyzmos/message-pusher")
 	fmt.Println("Usage: message-pusher [options]")
 	fmt.Println("Options:")
 	flag.CommandLine.VisitAll(func(f *flag.Flag) {

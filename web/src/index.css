@@ -1,41 +1,285 @@
+/* Neumorphism Global Styles */
+
+:root {
+  --neu-bg: #e0e5ec;
+  --neu-bg-light: #f0f0f3;
+  --neu-shadow-dark: #b8bcc2;
+  --neu-shadow-light: #ffffff;
+  --neu-accent: #6d5dfc;
+  --neu-text: #333333;
+  --neu-text-muted: #6b7280;
+  --neu-radius: 12px;
+}
+
 body {
-    margin: 0;
-    padding-top: 55px;
-    overflow-y: scroll;
-    font-family: Lato, 'Helvetica Neue', Arial, Helvetica, "Microsoft YaHei", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    scrollbar-width: none;
+  margin: 0;
+  padding-top: 55px;
+  overflow-y: scroll;
+  font-family: Lato, 'Helvetica Neue', Arial, Helvetica, "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--neu-bg);
+  color: var(--neu-text);
+  scrollbar-width: none;
 }
 
 body::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 .main-content {
-    padding: 4px;
+  padding: 4px;
 }
 
 .small-icon .icon {
-    font-size: 1em !important;
+  font-size: 1em !important;
+}
+
+.quote {
+  margin-left: 0;
+  padding: 0 1em;
+  border-left: 0.25em solid #ddd;
+}
+
+a {
+  color: var(--neu-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: #5a4ad1; /* Slightly darker accent */
+}
+
+/* Utility Classes */
+.neu-raised {
+  background: var(--neu-bg);
+  border-radius: var(--neu-radius);
+  box-shadow: 8px 8px 16px var(--neu-shadow-dark), -8px -8px 16px var(--neu-shadow-light);
+  border: none !important;
+}
+
+.neu-raised-sm {
+  background: var(--neu-bg);
+  border-radius: var(--neu-radius);
+  box-shadow: 4px 4px 8px var(--neu-shadow-dark), -4px -4px 8px var(--neu-shadow-light);
+  border: none !important;
+}
+
+.neu-pressed {
+  background: var(--neu-bg);
+  border-radius: var(--neu-radius);
+  box-shadow: inset 8px 8px 16px var(--neu-shadow-dark), inset -8px -8px 16px var(--neu-shadow-light);
+  border: none !important;
+}
+
+.neu-pressed-sm {
+  background: var(--neu-bg);
+  border-radius: var(--neu-radius);
+  box-shadow: inset 4px 4px 8px var(--neu-shadow-dark), inset -4px -4px 8px var(--neu-shadow-light);
+  border: none !important;
+}
+
+.neu-circle {
+  border-radius: 50% !important;
+}
+
+/* Semantic UI Overrides */
+
+/* Segments, Cards, Messages */
+.ui.segment,
+.ui.card,
+.ui.cards > .card,
+.ui.message {
+  background: var(--neu-bg) !important;
+  border: none !important;
+  box-shadow: 8px 8px 16px var(--neu-shadow-dark), -8px -8px 16px var(--neu-shadow-light) !important;
+  border-radius: var(--neu-radius) !important;
+  color: var(--neu-text) !important;
+}
+
+.ui.card > .content > .header,
+.ui.cards > .card > .content > .header,
+.ui.header {
+  color: var(--neu-text) !important;
+}
+
+.ui.card > .content > .meta,
+.ui.cards > .card > .content > .meta {
+  color: var(--neu-text-muted) !important;
+}
+
+/* Remove internal borders in segments/cards if desired, or keep them soft */
+.ui.segment:after, .ui.segment:before {
+    display: none;
+}
+
+/* Buttons */
+.ui.button {
+  background: var(--neu-bg) !important;
+  color: var(--neu-text) !important;
+  border: none !important;
+  box-shadow: 5px 5px 10px var(--neu-shadow-dark), -5px -5px 10px var(--neu-shadow-light) !important;
+  border-radius: 10px !important;
+  transition: all 0.2s ease !important;
+  font-weight: 600 !important;
+}
+
+.ui.button:hover {
+  background: var(--neu-bg) !important;
+  box-shadow: 3px 3px 6px var(--neu-shadow-dark), -3px -3px 6px var(--neu-shadow-light) !important;
+  transform: translateY(-1px);
+}
+
+.ui.button:active,
+.ui.button.active {
+  background: var(--neu-bg) !important;
+  box-shadow: inset 4px 4px 8px var(--neu-shadow-dark), inset -4px -4px 8px var(--neu-shadow-light) !important;
+  transform: translateY(1px);
+}
+
+/* Circular Buttons */
+.ui.circular.button {
+  border-radius: 50% !important;
+}
+
+/* Primary/Positive/Negative buttons - use accent color text or slight tint */
+.ui.primary.button, .ui.blue.button {
+    color: var(--neu-accent) !important;
+}
+.ui.positive.button, .ui.green.button {
+    color: #21ba45 !important;
+}
+.ui.negative.button, .ui.red.button {
+    color: #db2828 !important;
+}
+
+/* Inputs */
+.ui.form input:not([type]), 
+.ui.form input[type=date], 
+.ui.form input[type=datetime-local], 
+.ui.form input[type=email], 
+.ui.form input[type=file], 
+.ui.form input[type=number], 
+.ui.form input[type=password], 
+.ui.form input[type=search], 
+.ui.form input[type=tel], 
+.ui.form input[type=text], 
+.ui.form input[type=time], 
+.ui.form input[type=url], 
+.ui.input > input,
+.ui.form textarea {
+  background: var(--neu-bg) !important;
+  border: none !important;
+  box-shadow: inset 5px 5px 10px var(--neu-shadow-dark), inset -5px -5px 10px var(--neu-shadow-light) !important;
+  border-radius: var(--neu-radius) !important;
+  color: var(--neu-text) !important;
+  padding: 1em !important;
+}
+
+.ui.form input:focus, .ui.input > input:focus, .ui.form textarea:focus {
+    color: var(--neu-accent) !important;
+}
+
+/* Menu / Header */
+.ui.menu {
+  background: var(--neu-bg) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.ui.menu.fixed {
+    box-shadow: 0px 4px 10px var(--neu-shadow-dark) !important;
+}
+
+.ui.menu .item {
+    color: var(--neu-text) !important;
+}
+
+.ui.menu .item:before {
+    background: transparent !important;
+}
+
+.ui.menu .active.item {
+    background: transparent !important;
+    color: var(--neu-accent) !important;
+    font-weight: bold !important;
+    box-shadow: inset 3px 3px 6px var(--neu-shadow-dark), inset -3px -3px 6px var(--neu-shadow-light) !important;
+    border-radius: 8px !important;
+}
+
+/* Dropdown */
+.ui.dropdown .menu {
+    background: var(--neu-bg) !important;
+    border: none !important;
+    box-shadow: 8px 8px 16px var(--neu-shadow-dark), -8px -8px 16px var(--neu-shadow-light) !important;
+    border-radius: var(--neu-radius) !important;
+}
+
+.ui.dropdown .menu > .item {
+    color: var(--neu-text) !important;
+    border-top: none !important;
+}
+
+.ui.dropdown .menu > .item:hover {
+    background: transparent !important;
+    box-shadow: inset 3px 3px 6px var(--neu-shadow-dark), inset -3px -3px 6px var(--neu-shadow-light) !important;
+    border-radius: 8px !important;
+}
+
+/* Labels */
+.ui.label {
+    background: var(--neu-bg) !important;
+    box-shadow: 3px 3px 6px var(--neu-shadow-dark), -3px -3px 6px var(--neu-shadow-light) !important;
+    border: none !important;
+    color: var(--neu-text) !important;
+    border-radius: 6px !important;
+}
+
+/* Tables */
+.ui.table {
+    background: var(--neu-bg) !important;
+    border: none !important;
+    box-shadow: 8px 8px 16px var(--neu-shadow-dark), -8px -8px 16px var(--neu-shadow-light) !important;
+    border-radius: var(--neu-radius) !important;
+}
+.ui.table thead th {
+    background: var(--neu-bg) !important;
+    border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+    color: var(--neu-text) !important;
+}
+.ui.table tbody td {
+    border-top: 1px solid rgba(0,0,0,0.05) !important;
+}
+
+/* Modal */
+.ui.modal {
+    background: var(--neu-bg) !important;
+    border-radius: var(--neu-radius) !important;
+    box-shadow: 10px 10px 20px var(--neu-shadow-dark), -10px -10px 20px var(--neu-shadow-light) !important;
+}
+.ui.modal > .header, .ui.modal > .content, .ui.modal > .actions {
+    background: var(--neu-bg) !important;
+    border: none !important;
+    color: var(--neu-text) !important;
+}
+
+/* Divider */
+.ui.divider {
+    border-top: 1px solid rgba(0,0,0,0.05) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.8) !important;
 }
 
 .custom-footer {
     font-size: 1.1em;
+    color: var(--neu-text-muted);
 }
 
 @media only screen and (max-width: 600px) {
     .hide-on-mobile {
         display: none !important;
     }
-}
-
-.quote {
-    margin-left: 0;
-    padding: 0 1em;
-    border-left: 0.25em solid #ddd;
 }

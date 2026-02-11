@@ -54,10 +54,10 @@ const Home = () => {
                       <p>
                         源码：
                         <a
-                          href='https://github.com/songquanpeng/message-pusher'
+                          href='https://github.com/xyzmos/message-pusher'
                           target='_blank'
-                        >
-                          https://github.com/songquanpeng/message-pusher
+                        > 
+                          https://github.com/xyzmos/message-pusher
                         </a>
                       </p>
                       <p>启动时间：{getStartTimeString()}</p>
